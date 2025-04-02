@@ -11,7 +11,8 @@ defmodule App.PetsFixtures do
     {:ok, pet} =
       attrs
       |> Enum.into(%{
-        name: "some name"
+        name: "some name",
+        type: "dog"
       })
       |> App.Pets.create_pet()
 

@@ -8,7 +8,7 @@ defmodule App.PetsTest do
 
     import App.PetsFixtures
 
-    @invalid_attrs %{name: nil}
+    @invalid_attrs %{name: nil, type: nil}
 
     test "list_pets/0 returns all pets" do
       pet = pet_fixture()
@@ -21,7 +21,7 @@ defmodule App.PetsTest do
     end
 
     test "create_pet/1 with valid data creates a pet" do
-      valid_attrs = %{name: "some name"}
+      valid_attrs = %{name: "some name", type: "dog"}
 
       assert {:ok, %Pet{} = pet} = Pets.create_pet(valid_attrs)
       assert pet.name == "some name"
@@ -33,10 +33,11 @@ defmodule App.PetsTest do
 
     test "update_pet/2 with valid data updates the pet" do
       pet = pet_fixture()
-      update_attrs = %{name: "some updated name"}
+      update_attrs = %{name: "some updated name", type: "cat"}
 
       assert {:ok, %Pet{} = pet} = Pets.update_pet(pet, update_attrs)
       assert pet.name == "some updated name"
+      assert pet.type == "cat"
     end
 
     test "update_pet/2 with invalid data returns error changeset" do

@@ -1,0 +1,28 @@
+<.header>
+  Pet owner {@pet_owner.id}
+  <:subtitle>This is a pet_owner record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/pet_owners/#{@pet_owner}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit pet_owner</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="First name">{@pet_owner.first_name}</:item>
+  <:item title="Last name">{@pet_owner.last_name}</:item>
+  <:item title="Email">{@pet_owner.email}</:item>
+</.list>
+
+<.back navigate={~p"/pet_owners"}>Back to pet_owners</.back>
+
+<.modal :if={@live_action == :edit} id="pet_owner-modal" show on_cancel={JS.patch(~p"/pet_owners/#{@pet_owner}")}>
+  <.live_component
+    module={AppWeb.PetOwnerLive.FormComponent}
+    id={@pet_owner.id}
+    title={@page_title}
+    action={@live_action}
+    pet_owner={@pet_owner}
+    patch={~p"/pet_owners/#{@pet_owner}"}
+  />
+</.modal>
