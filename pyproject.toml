@@ -1,0 +1,17 @@
+[project]
+name = "pawclock-com"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[all]>=0.115.12",
+    "python-dotenv>=1.1.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-cover>=3.0.0",
+    "pytest-sugar>=1.0.0",
+]
