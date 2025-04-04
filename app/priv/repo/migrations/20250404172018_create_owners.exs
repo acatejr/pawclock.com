@@ -1,8 +1,8 @@
-defmodule App.Repo.Migrations.CreatePetOwners do
+defmodule App.Repo.Migrations.CreateOwners do
   use Ecto.Migration
 
   def change do
-    create table(:pet_owners) do
+    create table(:owners) do
       add :first_name, :string
       add :last_name, :string
       add :email, :string
@@ -10,6 +10,6 @@ defmodule App.Repo.Migrations.CreatePetOwners do
       timestamps(type: :utc_datetime)
     end
 
-    create unique_index(:pet_owners, [:email])
+    create unique_index(:owners, [:email])
   end
 end

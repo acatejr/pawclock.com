@@ -2,7 +2,7 @@ defmodule AppWeb.PetLiveTest do
   use AppWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import App.PetsFixtures
+  import App.PawClockFixtures
 
   @create_attrs %{name: "some name"}
   @update_attrs %{name: "some updated name"}

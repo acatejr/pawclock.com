@@ -2,10 +2,15 @@ import Config
 
 # Configure your database
 config :app, App.Repo,
-  username: System.get_env("POSTGRES_USER"), # Default to "postgres" if not set
-  password: System.get_env("POSTGRES_PASSWORD"), # Default to "postgres" if not set
-  hostname: System.get_env("POSTGRES_HOST"), # Default to "localhost" if not set
-  database: System.get_env("POSTGRES_DB"), # Default to "app_dev" if not set
+  username: System.get_env("POSTGRES_USER") || "postgres",
+  password: System.get_env("POSTGRES_PASSWORD") || "postgres",
+  hostname: System.get_env("POSTGRES_HOST") || "localhost",
+  port: System.get_env("POSTGRES_PORT") || "5432",
+  database: System.get_env("POSTGRES_DB") || "app_dev",
+  # username: "postgres",
+  # password: "postgres",
+  # hostname: "localhost",
+  # database: "app_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -17,14 +22,13 @@ config :app, App.Repo,
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
 config :app, AppWeb.Endpoint,
-  # Bind to 0.0.0.0 to expose the server to the docker host machine.
-  # This makes make the service accessible from any network interface.
-  # Change to `ip: {127, 0, 0, 1}` to allow access only from the server machine.
-  http: [ip: {0, 0, 0, 0}, port: 4000],
+  # Binding to loopback ipv4 address prevents access from other machines.
+  # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
+  http: [ip: {127, 0, 0, 1}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: System.get_env("SECRET_KEY_BASE"),
+  secret_key_base: "SikmZQDCJEf4btgJRiM0jg8Y7oHzQg3VAXiiyXVInkBxARDPdCDx8MSD+b/FvjMz",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:app, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:app, ~w(--watch)]}

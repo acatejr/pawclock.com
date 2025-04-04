@@ -1,7 +1,7 @@
-defmodule AppWeb.PetOwnerLive.Show do
+defmodule AppWeb.OwnerLive.Show do
   use AppWeb, :live_view
 
-  alias App.Account
+  alias App.PawClock
 
   @impl true
   def mount(_params, _session, socket) do
@@ -13,9 +13,9 @@ defmodule AppWeb.PetOwnerLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:pet_owner, Account.get_pet_owner!(id))}
+     |> assign(:owner, PawClock.get_owner!(id))}
   end
 
-  defp page_title(:show), do: "Show Pet owner"
-  defp page_title(:edit), do: "Edit Pet owner"
+  defp page_title(:show), do: "Show Owner"
+  defp page_title(:edit), do: "Edit Owner"
 end

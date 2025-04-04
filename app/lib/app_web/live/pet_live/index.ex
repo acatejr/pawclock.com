@@ -1,12 +1,12 @@
 defmodule AppWeb.PetLive.Index do
   use AppWeb, :live_view
 
-  alias App.Pets
-  alias App.Pets.Pet
+  alias App.PawClock
+  alias App.PawClock.Pet
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :pets, Pets.list_pets())}
+    {:ok, stream(socket, :pets, PawClock.list_pets())}
   end
 
   @impl true
@@ -17,7 +17,7 @@ defmodule AppWeb.PetLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Pet")
-    |> assign(:pet, Pets.get_pet!(id))
+    |> assign(:pet, PawClock.get_pet!(id))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -39,8 +39,8 @@ defmodule AppWeb.PetLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    pet = Pets.get_pet!(id)
-    {:ok, _} = Pets.delete_pet(pet)
+    pet = PawClock.get_pet!(id)
+    {:ok, _} = PawClock.delete_pet(pet)
 
     {:noreply, stream_delete(socket, :pets, pet)}
   end

@@ -6,10 +6,15 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :app, App.Repo,
-  username: System.get_env("POSTGRES_USER"), # Default to "postgres" if not set
-  password: System.get_env("POSTGRES_PASSWORD"), # Default to "postgres" if not set
-  hostname: System.get_env("POSTGRES_HOST"), # Default to "localhost" if not set
-  database: "app_test#{System.get_env("POSTGRES_DB")}", # Default to "app_dev" if not set
+  username: System.get_env("POSTGRES_USER") || "postgres",
+  password: System.get_env("POSTGRES_PASSWORD") || "postgres",
+  hostname: System.get_env("POSTGRES_HOST") || "localhost",
+  port: System.get_env("POSTGRES_PORT") || "5432",
+  database: "pawclock_test#{System.get_env("MIX_TEST_PARTITION")}",
+  # username: "postgres",
+  # password: "postgres",
+  # hostname: "localhost",
+  # database: "app_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 
@@ -17,7 +22,7 @@ config :app, App.Repo,
 # you can enable the server option below.
 config :app, AppWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "vX8iOMLGfYuYgxLZF14O0r0z1/YVZ0mbydeNVdtzSbooddu8bKx00Jxv6DtGHz5J",
+  secret_key_base: "E4WBZQxa6oJXS1+5fXTGWO0xn4DJhuMYkTOy2XzvGaIqSR5jU1s++ZM+1EcIlC9D",
   server: false
 
 # In test we don't send emails

@@ -1,7 +1,7 @@
 defmodule AppWeb.PetLive.FormComponent do
   use AppWeb, :live_component
 
-  alias App.Pets
+  alias App.PawClock
 
   @impl true
   def render(assigns) do
@@ -20,10 +20,9 @@ defmodule AppWeb.PetLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:name]} type="text" label="Name" />
-        <.input field={@form[:type]} type="select" label="Type" options={[{"Dog", "dog"}, {"Cat", "cat"}]} />
         <:actions>
           <.button phx-disable-with="Saving...">Save Pet</.button>
-        </:actions>        
+        </:actions>
       </.simple_form>
     </div>
     """
@@ -35,13 +34,13 @@ defmodule AppWeb.PetLive.FormComponent do
      socket
      |> assign(assigns)
      |> assign_new(:form, fn ->
-       to_form(Pets.change_pet(pet))
+       to_form(PawClock.change_pet(pet))
      end)}
   end
 
   @impl true
   def handle_event("validate", %{"pet" => pet_params}, socket) do
-    changeset = Pets.change_pet(socket.assigns.pet, pet_params)
+    changeset = PawClock.change_pet(socket.assigns.pet, pet_params)
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
@@ -50,7 +49,7 @@ defmodule AppWeb.PetLive.FormComponent do
   end
 
   defp save_pet(socket, :edit, pet_params) do
-    case Pets.update_pet(socket.assigns.pet, pet_params) do
+    case PawClock.update_pet(socket.assigns.pet, pet_params) do
       {:ok, pet} ->
         notify_parent({:saved, pet})
 
@@ -65,7 +64,7 @@ defmodule AppWeb.PetLive.FormComponent do
   end
 
   defp save_pet(socket, :new, pet_params) do
-    case Pets.create_pet(pet_params) do
+    case PawClock.create_pet(pet_params) do
       {:ok, pet} ->
         notify_parent({:saved, pet})
 
