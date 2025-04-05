@@ -1,10 +1,11 @@
 defmodule App.PawClock.Pet do
   use Ecto.Schema
   import Ecto.Changeset
+  alias App.PawClock.{Owner, OwnerPet}
 
   schema "pets" do
     field :name, :string
-
+    many_to_many :owners, Owner, join_through: "owners_pets"
     timestamps(type: :utc_datetime)
   end
 

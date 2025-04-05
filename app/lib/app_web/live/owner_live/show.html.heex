@@ -12,7 +12,19 @@
   <:item title="First name">{@owner.first_name}</:item>
   <:item title="Last name">{@owner.last_name}</:item>
   <:item title="Email">{@owner.email}</:item>
-</.list>
+  <:item title="Pets">
+    <%= if @owner.pets do %>
+      <ul class="list-disc pl-5">
+        <%= for pet <- @owner.pets do %>
+          <li><.link patch={~p"/pets/#{pet}"}><%= pet.name %></.link></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <span class="italic text-gray-500">No pets assigned</span>
+    <% end %>
+
+  </:item> 
+  </.list>
 
 <.back navigate={~p"/owners"}>Back to owners</.back>
 

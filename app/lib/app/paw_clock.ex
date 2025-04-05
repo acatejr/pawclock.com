@@ -131,7 +131,12 @@ defmodule App.PawClock do
       ** (Ecto.NoResultsError)
 
   """
-  def get_owner!(id), do: Repo.get!(Owner, id)
+  def get_owner!(id) do
+
+    Repo.get!(Owner, id)
+    |> Repo.preload(:pets)  # Preload the pets association
+
+  end
 
   @doc """
   Creates a owner.
