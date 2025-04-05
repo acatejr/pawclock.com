@@ -1,7 +1,7 @@
 defmodule App.PawClock.Pet do
   use Ecto.Schema
   import Ecto.Changeset
-  alias App.PawClock.{Owner, OwnerPet}
+  alias App.PawClock.{Owner}
 
   schema "pets" do
     field :name, :string
@@ -14,5 +14,8 @@ defmodule App.PawClock.Pet do
     pet
     |> cast(attrs, [:name])
     |> validate_required([:name])
+    # |> validate_required([:owners])
+    # |> cast_assoc(:owners, required: false)
+    # |> unique_constraint(:name, name: :pets_name_index)
   end
 end

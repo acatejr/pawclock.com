@@ -1,7 +1,7 @@
 defmodule App.PawClock.Owner do
   use Ecto.Schema
   import Ecto.Changeset
-  alias App.PawClock.{Pet, OwnerPet}
+  alias App.PawClock.{Pet}
 
   schema "owners" do
     field :first_name, :string
