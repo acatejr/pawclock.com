@@ -114,4 +114,62 @@ defmodule App.PawClockTest do
       assert %Ecto.Changeset{} = PawClock.change_owner(owner)
     end
   end
+
+  describe "daycare_sessions" do
+    alias App.PawClock.DayCareSession
+
+    import App.PawClockFixtures
+
+    @invalid_attrs %{status: nil, checkout: nil, checkin: nil}
+
+    test "list_daycare_sessions/0 returns all daycare_sessions" do
+      day_care_session = day_care_session_fixture()
+      assert PawClock.list_daycare_sessions() == [day_care_session]
+    end
+
+    test "get_day_care_session!/1 returns the day_care_session with given id" do
+      day_care_session = day_care_session_fixture()
+      assert PawClock.get_day_care_session!(day_care_session.id) == day_care_session
+    end
+
+    test "create_day_care_session/1 with valid data creates a day_care_session" do
+      valid_attrs = %{status: "some status", checkout: ~U[2025-04-08 17:35:00Z], checkin: ~U[2025-04-08 17:35:00Z]}
+
+      assert {:ok, %DayCareSession{} = day_care_session} = PawClock.create_day_care_session(valid_attrs)
+      assert day_care_session.status == "some status"
+      assert day_care_session.checkout == ~U[2025-04-08 17:35:00Z]
+      assert day_care_session.checkin == ~U[2025-04-08 17:35:00Z]
+    end
+
+    test "create_day_care_session/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = PawClock.create_day_care_session(@invalid_attrs)
+    end
+
+    test "update_day_care_session/2 with valid data updates the day_care_session" do
+      day_care_session = day_care_session_fixture()
+      update_attrs = %{status: "some updated status", checkout: ~U[2025-04-09 17:35:00Z], checkin: ~U[2025-04-09 17:35:00Z]}
+
+      assert {:ok, %DayCareSession{} = day_care_session} = PawClock.update_day_care_session(day_care_session, update_attrs)
+      assert day_care_session.status == "some updated status"
+      assert day_care_session.checkout == ~U[2025-04-09 17:35:00Z]
+      assert day_care_session.checkin == ~U[2025-04-09 17:35:00Z]
+    end
+
+    test "update_day_care_session/2 with invalid data returns error changeset" do
+      day_care_session = day_care_session_fixture()
+      assert {:error, %Ecto.Changeset{}} = PawClock.update_day_care_session(day_care_session, @invalid_attrs)
+      assert day_care_session == PawClock.get_day_care_session!(day_care_session.id)
+    end
+
+    test "delete_day_care_session/1 deletes the day_care_session" do
+      day_care_session = day_care_session_fixture()
+      assert {:ok, %DayCareSession{}} = PawClock.delete_day_care_session(day_care_session)
+      assert_raise Ecto.NoResultsError, fn -> PawClock.get_day_care_session!(day_care_session.id) end
+    end
+
+    test "change_day_care_session/1 returns a day_care_session changeset" do
+      day_care_session = day_care_session_fixture()
+      assert %Ecto.Changeset{} = PawClock.change_day_care_session(day_care_session)
+    end
+  end
 end

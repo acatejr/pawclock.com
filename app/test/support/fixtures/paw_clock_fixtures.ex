@@ -38,4 +38,20 @@ defmodule App.PawClockFixtures do
 
     owner
   end
+
+  @doc """
+  Generate a day_care_session.
+  """
+  def day_care_session_fixture(attrs \\ %{}) do
+    {:ok, day_care_session} =
+      attrs
+      |> Enum.into(%{
+        checkin: ~U[2025-04-08 17:35:00Z],
+        checkout: ~U[2025-04-08 17:35:00Z],
+        status: "some status"
+      })
+      |> App.PawClock.create_day_care_session()
+
+    day_care_session
+  end
 end

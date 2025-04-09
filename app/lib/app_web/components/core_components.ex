@@ -673,4 +673,39 @@ defmodule AppWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  def current_sessions(assigns) do
+    ~H"""
+    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
+    <table class="table-auto w-[40rem] mt-11 sm:w-full">
+      <caption class="text-md font-semibold leading-6 text-zinc-900 text-left">
+        Current Daycare Sessions
+      </caption>
+      <thead>
+        <tr class="text-left text-sm font-semibold leading-6 text-zinc-900">
+          <th>Owner</th>
+          <th>Pet</th>
+          <th>Checkin</th>
+          <th>Checkout</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-zinc-200 border-t border-zinc-200 text-sm leading-6 text-black-700">
+        <td class="pr-8">Mike</td>
+        <td class="pr-8">Dognabbit</td>
+        <td class="pr-8">2023-10-01 10:00</td>
+        <td class="pr-8">2023-10-01 12:00</td>
+        <td class="pr-8">Active</td>
+      </tbody>
+    </table>
+    </div>
+    """
+
+    # ~H"""
+    # <div {@rest} phx-hook="FocusTrap" class={["focus-trap", @class]}>
+    #   <%= render_slot(@inner_block) %>
+    # </div>
+    # """
+
+  end
 end

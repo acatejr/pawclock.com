@@ -31,6 +31,12 @@ defmodule AppWeb.Router do
     live "/owners/:id/edit", OwnerLive.Index, :edit
     live "/owners/:id", OwnerLive.Show, :show
     live "/owners/:id/show/edit", OwnerLive.Show, :edit
+
+    live "/daycare_sessions", DayCareSessionLive.Index, :index
+    live "/daycare_sessions/new", DayCareSessionLive.Index, :new
+    live "/daycare_sessions/:id/edit", DayCareSessionLive.Index, :edit
+    live "/daycare_sessions/:id", DayCareSessionLive.Show, :show
+    live "/daycare_sessions/:id/show/edit", DayCareSessionLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
