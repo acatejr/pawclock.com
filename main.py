@@ -5,8 +5,8 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 app = FastAPI(
-    title="PawClock API", 
-    description="PawClock API", 
+    title="PawClock API",
+    description="PawClock API",
     version="0.1.0"
 )
 
@@ -35,6 +35,13 @@ fake_db = {
         {"id": 9, "first_name": "Grace", "last_name": "Thomas", "pets": [9]},
         {"id": 10, "first_name": "Greg", "last_name": "Martinez", "pets": [10]},
     ],
+    "care_sessions": [
+        {"id": 1, "pet_id": 1, "owner_id": 1, "start_time": "2023-10-01T10:00:00", "end_time": "2023-10-01T11:00:00"},
+        {"id": 2, "pet_id": 2, "owner_id": 2, "start_time": "2023-10-02T12:00:00", "end_time": "2023-10-02T13:00:00"},
+        {"id": 3, "pet_id": 3, "owner_id": 3, "start_time": "2023-10-03T14:00:00", "end_time": "2023-10-03T15:00:00"},
+        {"id": 4, "pet_id": 4, "owner_id": 4, "start_time": "2023-10-04T16:00:00", "end_time": "2023-10-04T17:00:00"},
+        {"id": 5, "pet_id": 5, "owner_id": 5, "start_time": "2023-10-05T18:00:00", "end_time": "2023-10-05T19:00:00"},
+    ]
 }
 
 class Pet(BaseModel):
@@ -55,7 +62,17 @@ class Owner(BaseModel):
 
     def __str__(self):
         return f"Owner(id={self.id}, first_name={self.first_name}, last_name={self.last_name}, pets={self.pets})"
-    
+
+class CareSession(BaseModel):
+    id: int
+    pet_id: int
+    owner_id: int
+    start_time: datetime
+    end_time: datetime
+
+    def __str__(self):
+        return f"CareSession(id={self.id}, pet_id={self.pet_id}, owner_id={self.owner_id}, start_time={self.start_time}, end_time={self.end_time})"
+
 @app.get("/health")
 async def health():
     now = datetime.now()
@@ -83,10 +100,10 @@ async def get_pet(pet_id: int):
 @app.delete("/pets/{pet_id}", response_class=JSONResponse, status_code=202)
 async def delete_pet(pet_id: int):
     result = await delete_pet_from_db(pet_id)
-    
+
     if not result:
         raise HTTPException(status_code=404, detail="Pet not found")
-    
+
     return {"ok": result}
 
 @app.put("/pets/{pet_id}", response_class=JSONResponse, status_code=200)
@@ -99,8 +116,41 @@ async def update_pet(pet_id: int, Pet: Pet):
     result = await update_pet_in_db(pet_id, Pet)
     if not result:
         raise HTTPException(status_code=404, detail="Pet not found")
-    
+
     return result
+
+@app.get("/care_sessions", response_model=list[CareSession], status_code=200)
+async def get_care_sessions():
+    """
+    Get a list of all care sessions.
+    """
+    return fake_db["care_sessions"]
+
+@app.get("/care_sessions/{session_id}", response_model=CareSession, status_code=200)
+async def get_care_session(session_id: int):
+    """
+    Get a specific care session by ID.
+    """
+    for session in fake_db["care_sessions"]:
+        if session["id"] == session_id:
+            return session
+
+    raise HTTPException(status_code=404, detail="Care session not found")
+
+@app.delete("/care_sessions/{session_id}", response_class=JSONResponse, status_code=202)
+async def delete_care_session(session_id: int):
+    """
+    Delete a care session by ID.
+    """
+
+    for session in fake_db["care_sessions"]:
+        if session["id"] == session_id:
+            fake_db["care_sessions"].remove(session)
+            return {"ok": True}
+
+    raise HTTPException(status_code=404, detail="Care session not found")
+
+
 
 async def get_pet_by_id_from_db(pet_id) -> Pet:
     # Simulate a database query
@@ -116,9 +166,9 @@ async def update_pet_in_db(pet_id: int, pet: Pet):
             found_pet_idx = i
             fake_db["pets"][i] = pet
             return fake_db["pets"][i]
-    
+
     return None
-    
+
 async def delete_pet_from_db(pet_id: int) -> bool:
     # Simulate a database delete operation
     for pet in fake_db["pets"]:
