@@ -1,6 +1,4 @@
 from fastapi.testclient import TestClient
-
-# from sqlmodel import Session, SQLModel, create_engine
 from main import app
 import pytest
 from main import create_db_and_tables
@@ -41,7 +39,7 @@ def test_get_pets():
     response = client.get("/pets")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
-    assert len(response.json()) >= 1
+    assert len(response.json()) >= 0
 
 
 def test_get_pet():

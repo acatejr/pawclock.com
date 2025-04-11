@@ -355,6 +355,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "fastapi", extra = ["all"] },
+    { name = "phonenumbers" },
     { name = "python-dotenv" },
     { name = "sqlmodel" },
 ]
@@ -370,6 +371,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "fastapi", extras = ["all"], specifier = ">=0.115.12" },
+    { name = "phonenumbers", specifier = ">=9.0.3" },
     { name = "python-dotenv", specifier = ">=1.1.0" },
     { name = "sqlmodel", specifier = ">=0.0.24" },
 ]
@@ -380,6 +382,15 @@ dev = [
     { name = "pytest-cover", specifier = ">=3.0.0" },
     { name = "pytest-sugar", specifier = ">=1.0.0" },
     { name = "ruff", specifier = ">=0.11.5" },
+]
+
+[[package]]
+name = "phonenumbers"
+version = "9.0.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f4/00/5a43f1a451421d17c8e823697db2958021885296a35744af266d60320ebb/phonenumbers-9.0.3.tar.gz", hash = "sha256:c5084e6c6a77e0e8d725086c7f69002ef8e39529155b8cd31cbf8c987f344a33", size = 2296846 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ce/96/f555de760e8907ab0acee4adea5952d5edb2d8a6cd43b5b3219ea4538f46/phonenumbers-9.0.3-py2.py3-none-any.whl", hash = "sha256:0509d9b70ef66c04a1538f0b31c3e0c0b023127dad0eb1199adef0bc1841ff34", size = 2582462 },
 ]
 
 [[package]]

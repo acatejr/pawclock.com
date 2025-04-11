@@ -6,6 +6,9 @@ format:
 	uv run ruff format .
 
 test:
-	uv run pytest
+	uv run pytest -v
+
+serve:
+	uv run fastapi dev main.py
 
 all: format test
