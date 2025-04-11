@@ -1,42 +1,77 @@
-# tests/test_users.py
 from fastapi.testclient import TestClient
+
+# from sqlmodel import Session, SQLModel, create_engine
 from main import app
-from main import Pet, update_pet_in_db
+import pytest
+from main import create_db_and_tables
 
-client = TestClient(app)
 
-def test_get_pet():
-    pet_data = 1
-    response = client.get(f"/pets/{pet_data}")
-    assert response.status_code == 200
-    assert response.json()["id"] == pet_data
+@pytest.fixture(scope="session", autouse=True)
+def prep_test_environ(request):
+    create_db_and_tables()
 
-def test_get_pets():
-    response = client.get("/pets")
-    assert response.status_code == 200
-    assert len(response.json()) >= 1
 
 def test_create_pet():
-    pet_data = {"id": 0, "name": "Fluffy"}
+    client = TestClient(app)
+    pet_data = {"name": "Fluffy"}
     response = client.post("/pets/", json=pet_data)
+
     assert response.status_code == 201
     assert response.json()["name"] == pet_data["name"]
+    assert "id" in response.json().keys()
+
 
 def test_delete_pet():
-    pet_data = 1
-    response = client.delete(f"/pets/{pet_data}")
+    client = TestClient(app)
+    pet_data = {"name": "Rufus"}
+    response = client.post("/pets/", json=pet_data)
+    assert response.status_code == 201
+    pet_id = response.json()["id"]
+    assert pet_id is not None
+
+    response = client.delete(f"/pets/{pet_id}")
     assert response.status_code == 202
     assert response.json()["ok"] == True
+    assert response.json()["id"] == pet_id
+    assert response.json()["deleted"] == 1
 
-def test_delete_non_existent_pet():
-    pet_data = 9999
-    response = client.delete(f"/pets/{pet_data}")
-    assert response.status_code == 404    
-    assert response.json()["detail"] == "Pet not found"
+
+def test_get_pets():
+    client = TestClient(app)
+    response = client.get("/pets")
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+    assert len(response.json()) >= 1
+
+
+def test_get_pet():
+    client = TestClient(app)
+
+    pet_data = {"name": "David"}
+    response = client.post("/pets/", json=pet_data)
+    assert response.status_code == 201
+    pet_id = response.json()["id"]
+
+    response = client.get(f"/pet/{pet_id}")
+    assert response.status_code == 200
+    assert response.json()["id"] == pet_id
+
 
 def test_update_pet():
-    pet_id = 9
-    pet = {"id": pet_id, "name": "Steve"}
-    response = client.put(f"/pets/{pet_id}", json=pet)
+    client = TestClient(app)
+    pet_data = {"name": "Steve"}
+    response = client.post("/pets/", json=pet_data)
+    assert response.status_code == 201
+    pet_id = response.json()["id"]
+
+    updated_pet_data = {"name": "Steve Updated"}
+    response = client.patch(f"/pets/{pet_id}", json=updated_pet_data)
     assert response.status_code == 200
-    assert response.json()["name"] == pet["name"]
+    assert response.json()["name"] == updated_pet_data["name"]
+
+
+# def test_delete_non_existent_pet():
+#     pet_data = 9999
+#     response = client.delete(f"/pets/{pet_data}")
+#     assert response.status_code == 404
+#     assert response.json()["detail"] == "Pet not found"

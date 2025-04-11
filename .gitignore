@@ -34,3 +34,7 @@ docker-compose.override.yml
 *.pyc
 .coverage
 test.out
+pawclock.db
+
+
+.ruff_cache/
