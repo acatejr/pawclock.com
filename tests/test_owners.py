@@ -43,7 +43,7 @@ def test_get_owner():
     assert response.status_code == 201
 
     owner_id = response.json()["id"]
-    response = client.get(f"/pet/{owner_id}")
+    response = client.get(f"/owner/{owner_id}")
     assert response.status_code == 200
     assert response.json()["id"] == owner_id
 
