@@ -1,3 +1,8 @@
+__pycache__/
+.pytest_cache/
+.venv/
+
+
 # Elixir and Phoenix specific
 /_build/
 deps/
@@ -26,3 +31,12 @@ docker-compose.override.yml
 *.iml
 
 *scratch*
+*.pyc
+.coverage
+test.out
+pawclock.db
+
+
+.ruff_cache/
+__pycache__/
+*.pyc

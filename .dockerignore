@@ -1,5 +1,9 @@
+__pycache__/
+.pytest_cache__/
+.venv/
 .dockerignore
 Dockerfile
 README.md
 docker-compose.yml
 compose.yml
+app/
