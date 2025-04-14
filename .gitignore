@@ -38,3 +38,5 @@ pawclock.db
 
 
 .ruff_cache/
+__pycache__/
+*.pyc

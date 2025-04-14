@@ -1,0 +1,28 @@
+<.header>
+  Day care session {@day_care_session.id}
+  <:subtitle>This is a day_care_session record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/daycare_sessions/#{@day_care_session}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit day_care_session</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Checkin">{@day_care_session.checkin}</:item>
+  <:item title="Checkout">{@day_care_session.checkout}</:item>
+  <:item title="Status">{@day_care_session.status}</:item>
+</.list>
+
+<.back navigate={~p"/daycare_sessions"}>Back to daycare_sessions</.back>
+
+<.modal :if={@live_action == :edit} id="day_care_session-modal" show on_cancel={JS.patch(~p"/daycare_sessions/#{@day_care_session}")}>
+  <.live_component
+    module={AppWeb.DayCareSessionLive.FormComponent}
+    id={@day_care_session.id}
+    title={@page_title}
+    action={@live_action}
+    day_care_session={@day_care_session}
+    patch={~p"/daycare_sessions/#{@day_care_session}"}
+  />
+</.modal>
