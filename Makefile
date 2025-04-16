@@ -11,4 +11,7 @@ test:
 serve:
 	uv run fastapi dev main.py
 
+test-models:
+	uv run pytest -v tests/test_models.py
+
 all: format test
