@@ -8,6 +8,7 @@ dependencies = [
     "fastapi[all]>=0.115.12",
     "phonenumbers>=9.0.3",
     "python-dotenv>=1.1.0",
+    "sqlalchemy>=2.0.40",
     "sqlmodel>=0.0.24",
 ]
 

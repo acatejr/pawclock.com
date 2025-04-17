@@ -2,7 +2,7 @@ __pycache__/
 .pytest_cache/
 .venv/
 
-
+pawclock_test.db
 # Elixir and Phoenix specific
 /_build/
 deps/

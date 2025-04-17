@@ -1,42 +1,47 @@
-from typing import Optional
-from sqlmodel import SQLModel, Field
+# from sqlalchemy import create_engine, Column, Integer, String, Table, ForeignKey
+from sqlalchemy.orm import relationship, Mapped, mapped_column, DeclarativeBase
+from sqlalchemy import ForeignKey, String, Integer, text, func
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
 
 
-class PetBase(SQLModel):
-    name: str
+class Owner(Base):
+    __tablename__ = 'owners'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
+    email = Column(String, nullable=True)
+    phone = Column(String, nullable=False)
+    pets = relationship("Pet", secondary="owners_pets", back_populates="owners")
 
 
-class Pet(PetBase, table=True):
-    __tablename__ = "pets"
-    id: Optional[int] = Field(default=None, primary_key=True)
+class Pet(Base):
+    __tablename__ = 'pets'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    owners = relationship("Owner", secondary="owners_pets", back_populates="pets")
 
 
-class PetCreate(PetBase):
-    pass
+class OwnerPet(Base):
+    __tablename__ = 'owners_pets'
+    owner_id = Column(Integer, ForeignKey('owners.id'), primary_key=True)
+    pet_id = Column(Integer, ForeignKey('pets.id'), primary_key=True)
 
 
-class PetPublic(PetBase):
-    id: int
+class CareSession(Base):
+    __tablename__ = 'care_sessions'
+
+    id = Column(Integer, primary_key=True)
+    pet_id = Column(Integer, ForeignKey('pets.id'), nullable=False)
+    owner_id = Column(Integer, ForeignKey('owners.id'), nullable=False)
+    start_date = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    end_date = Column(DateTime(timezone=True))
 
 
-class OwnerBase(SQLModel):
-    first_name: str
-    last_name: str
-    email: str
-    phone: str
-    # pets: list[PetPublic] = []
+# Create a SQLite database in memory for demonstration purposes
+# engine = create_engine('sqlite:///:memory:')
 
-
-class Owner(OwnerBase, table=True):
-    __tablename__ = "owners"
-    id: Optional[int] = Field(default=None, primary_key=True)
-    # pets: list[PetPublic] = []
-
-
-class OwnerCreate(OwnerBase):
-    pass
-
-
-class OwnerPublic(OwnerBase):
-    id: int
-    # pets: list[PetPublic] = []
