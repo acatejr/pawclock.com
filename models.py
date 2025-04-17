@@ -1,7 +1,7 @@
 # from sqlalchemy import create_engine, Column, Integer, String, Table, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column, DeclarativeBase
-from sqlalchemy import ForeignKey, String, Integer
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy import ForeignKey, String, Integer, text, func
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -32,48 +32,16 @@ class OwnerPet(Base):
     pet_id = Column(Integer, ForeignKey('pets.id'), primary_key=True)
 
 
+class CareSession(Base):
+    __tablename__ = 'care_sessions'
+
+    id = Column(Integer, primary_key=True)
+    pet_id = Column(Integer, ForeignKey('pets.id'), nullable=False)
+    owner_id = Column(Integer, ForeignKey('owners.id'), nullable=False)
+    start_date = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    end_date = Column(DateTime(timezone=True))
+
+
 # Create a SQLite database in memory for demonstration purposes
 # engine = create_engine('sqlite:///:memory:')
 
-# from typing import Optional
-# from sqlmodel import SQLModel, Field
-
-
-# class PetBase(SQLModel):
-#     name: str
-
-
-# class Pet(PetBase, table=True):
-#     __tablename__ = "pets"
-#     id: Optional[int] = Field(default=None, primary_key=True)
-
-
-# class PetCreate(PetBase):
-#     pass
-
-
-# class PetPublic(PetBase):
-#     id: int
-
-
-# class OwnerBase(SQLModel):
-#     first_name: str
-#     last_name: str
-#     email: str
-#     phone: str
-#     # pets: list[PetPublic] = []
-
-
-# class Owner(OwnerBase, table=True):
-#     __tablename__ = "owners"
-#     id: Optional[int] = Field(default=None, primary_key=True)
-#     # pets: list[PetPublic] = []
-
-
-# class OwnerCreate(OwnerBase):
-#     pass
-
-
-# class OwnerPublic(OwnerBase):
-#     id: int
-#     # pets: list[PetPublic] = []
