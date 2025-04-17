@@ -2,7 +2,6 @@ __pycache__/
 .pytest_cache/
 .venv/
 
-pawclock_test.db
 # Elixir and Phoenix specific
 /_build/
 deps/
@@ -34,10 +33,13 @@ docker-compose.override.yml
 *.pyc
 .coverage
 test.out
-pawclock.db
 
 
 .ruff_cache/
 __pycache__/
 tests/__pycache__/
 *.pyc
+
+pawclock_test.db
+pawclock_dev.db
+pawclock.db
