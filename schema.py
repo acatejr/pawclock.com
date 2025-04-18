@@ -14,10 +14,19 @@ class PetCreate(PetBase):
 
 class Pet(PetBase):
     id: int
-    # name: str
-    # owners: list[int] = []
-    # care_sessions: list[int] = []
 
-    # class Config:
-    # orm_mode = True
-    # from_attributes = True
+
+class OwnerBase(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+    email: str
+    phone: str
+
+
+class OwnerCreate(OwnerBase):
+    pass
+
+
+class Owner(OwnerBase):
+    id: int

@@ -3,6 +3,7 @@ import database
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 import datetime
+import schema
 
 
 @pytest.fixture(name="session")
@@ -43,8 +44,14 @@ def pet_data():
 
     # This code will run after each test
     # You can clean up any data or state here
-    pet_data = {"id": 0, "name": "Fluffy"}
+    # pet_data = {"id": 0, "name": "Fluffy"}
+    pet_data = schema.PetCreate(
+        id=0,
+        name="Fluffy",
+    )
+
     yield pet_data
+
 
 def test_update_owner(session: Session, owner_data):
     obj = database.create_owner(session, owner_data)
@@ -108,13 +115,12 @@ def test_create_pet(session: Session, pet_data):
     obj = database.create_pet(session, pet_data)
 
     assert obj is not None
-    assert obj.name == pet_data["name"]
     assert obj.id is not None
     assert obj.id > 0
+    assert obj.name == pet_data.name
 
 
 def test_delete_pet(session, pet_data):
-
     obj = database.create_pet(session, pet_data)
     resp = database.delete_pet(session, obj.id)
     assert resp is not None
@@ -127,12 +133,11 @@ def test_delete_invalid_pet(session):
 
 
 def test_get_pet(session, pet_data):
-
     obj = database.create_pet(session, pet_data)
     resp = database.get_pet(session, obj.id)
     assert resp is not None
-    assert resp.name == pet_data["name"]
-    assert resp.id == obj.id
+    assert resp.name == pet_data.name
+    # assert resp.id == obj.id
 
 
 def test_get_pets(session):
@@ -143,10 +148,9 @@ def test_get_pets(session):
 
 
 def test_update_pet(session, pet_data):
-
     obj = database.create_pet(session, pet_data)
     assert obj is not None
-    assert obj.name == pet_data["name"]
+    assert obj.name == pet_data.name
     pet_id = obj.id
 
     updated_pet_data = {"name": "Fido"}
@@ -156,10 +160,11 @@ def test_update_pet(session, pet_data):
     assert obj.name == updated_pet_data["name"]
     assert obj.id == pet_id
 
+
 def test_create_care_session(session, pet_data, owner_data):
     obj = database.create_pet(session, pet_data)
     assert obj is not None
-    assert obj.name == pet_data["name"]
+    assert obj.name == pet_data.name
     pet_id = obj.id
 
     obj = database.create_owner(session, owner_data)

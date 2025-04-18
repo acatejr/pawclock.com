@@ -18,6 +18,7 @@ def create_care_session(session: Session, care_session_data: dict):
 
 
 def update_owner(session: Session, owner_id: int, owner_data: dict):
+
     owner = session.query(models.Owner).filter(models.Owner.id == owner_id).first()
 
     if not owner:
@@ -26,6 +27,7 @@ def update_owner(session: Session, owner_id: int, owner_data: dict):
     for key, value in owner_data.items():
         setattr(owner, key, value)
 
+    session.add(owner)
     session.commit()
     session.refresh(owner)
 
@@ -50,12 +52,15 @@ def delete_owner(session: Session, owner_id: int):
 
 
 def create_owner(session: Session, owner_data: dict):
-    owner = models.Owner(
-        first_name=owner_data["first_name"],
-        last_name=owner_data["last_name"],
-        email=owner_data["email"],
-        phone=owner_data["phone"],
-    )
+    # owner = models.Owner(
+    #     first_name=owner_data.first_name, #["first_name"],
+    #     last_name=owner_data.last_name, # ["last_name"],
+    #     email=owner_data.email, # ["email"],
+    #     phone=owner_data.phone, #["phone"],
+    # )
+    owner = models.Owner()
+    for key, value in owner_data:
+        setattr(owner, key, value)
 
     session.add(owner)
     session.commit()
@@ -76,7 +81,7 @@ def get_pet(session: Session, pet_id: int):
 
 def create_pet(session: Session, pet_data: dict):
     pet = models.Pet(
-        name=pet_data["name"],
+        name=pet_data.name  # pet_data["name"],
     )
 
     session.add(pet)
@@ -94,6 +99,7 @@ def delete_pet(session: Session, pet_id: int):
 
 
 def update_pet(session: Session, pet_id: int, pet_data: dict):
+
     pet = session.query(models.Pet).filter(models.Pet.id == pet_id).first()
 
     if not pet:
@@ -102,6 +108,7 @@ def update_pet(session: Session, pet_id: int, pet_data: dict):
     for key, value in pet_data.items():
         setattr(pet, key, value)
 
+    session.add(pet)
     session.commit()
     session.refresh(pet)
 

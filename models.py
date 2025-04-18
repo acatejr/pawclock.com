@@ -17,6 +17,9 @@ class Owner(Base):
     phone = Column(String, nullable=False)
     pets = relationship("Pet", secondary="owners_pets", back_populates="owners")
 
+    def __repr__(self):
+        return f"<Owner(id={self.id}, first_name={self.first_name}, last_name={self.last_name})>"
+
 
 class Pet(Base):
     __tablename__ = "pets"

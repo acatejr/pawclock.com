@@ -53,9 +53,11 @@ async def health():
 @app.post("/pets/", response_model=schema.Pet, status_code=201)
 async def create_pet(pet: schema.PetCreate, session: Session = Depends(get_session)):
     new_pet = models.Pet(
+        id=0,
         name=pet.name,
     )
 
+    new_pet = database.create_pet(session, new_pet)
     session.add(new_pet)
     session.commit()
     session.refresh(new_pet)
@@ -67,131 +69,100 @@ async def create_pet(pet: schema.PetCreate, session: Session = Depends(get_sessi
 async def delete_pet(*, session: Session = Depends(get_session), pet_id: int):
     result = database.delete_pet(session, pet_id)
 
-    # pet = session.get(schema.Pet, pet_id)
-    # print(pet)
-
-    # if not pet:
-    #     raise HTTPException(status_code=404, detail="Pet not found")
-
-    # session.delete(pet)
-    # session.commit()
-
     return {"ok": True, "id": pet_id, "deleted": 1}
 
 
-# @app.post("/owners/", response_model=OwnerPublic, status_code=201)
-# async def create_owner(*, session: Session = Depends(get_session), owner: OwnerCreate):
-#     db_owner = Owner.model_validate(owner)
-#     session.add(db_owner)
-#     session.commit()
-#     session.refresh(db_owner)
-#     return db_owner
+@app.get("/pets", response_model=list[schema.Pet])
+async def get_pets(
+    *,
+    session: Session = Depends(get_session),
+    offset: int = 0,
+    limit: int = Query(default=10, le=100),
+):
+    pets = database.get_pets(session)
+    if not pets:
+        raise HTTPException(status_code=404, detail="Pets not found")
+    return pets
 
 
-# @app.get("/owners", response_model=list[OwnerPublic])
-# async def get_owners(
-#     *,
-#     session: Session = Depends(get_session),
-#     offset: int = 0,
-#     limit: int = Query(default=10, le=100),
-# ):
-#     owners = session.exec(select(Owner).offset(offset).limit(limit)).all()
+@app.get("/pets/{pet_id}", response_model=schema.Pet)
+async def get_pet(*, session: Session = Depends(get_session), pet_id: int):
+    pet = database.get_pet(session, pet_id)
+    if not pet:
+        raise HTTPException(status_code=404, detail="Pet not found")
 
-#     return owners
+    return pet
 
 
-# @app.get("/owner/{owner_id}", response_model=OwnerPublic)
-# async def get_owner(*, session: Session = Depends(get_session), owner_id: int):
-#     owner = session.get(Owner, owner_id)
+@app.patch("/pets/{pet_id}", response_model=schema.Pet)
+async def update_pet(
+    *, session: Session = Depends(get_session), pet_id: int, pet: schema.PetCreate
+):
+    updated_pet = database.update_pet(session, pet_id, pet.model_dump(exclude_unset=True))
+    if not updated_pet:
+        raise HTTPException(status_code=404, detail="Pet not found")
 
-#     if not owner:
-#         raise HTTPException(status_code=404, detail="Owner not found")
-
-#     return owner
-
-
-# @app.patch("/owner/{owner_id}", response_model=OwnerPublic)
-# async def update_owner(
-#     *, session: Session = Depends(get_session), owner_id: int, owner: OwnerCreate
-# ):
-#     db_owner = session.get(Owner, owner_id)
-
-#     if not db_owner:
-#         raise HTTPException(status_code=404, detail="Owner not found")
-
-#     db_owner_data = owner.model_dump(exclude_unset=True)
-#     for key, value in db_owner_data.items():
-#         setattr(db_owner, key, value)
-
-#     session.add(db_owner)
-#     session.commit()
-#     session.refresh(db_owner)
-
-#     return db_owner
+    return updated_pet
 
 
-# @app.delete("/owners/{owner_id}", status_code=202)
-# async def delete_owner(*, session: Session = Depends(get_session), owner_id: int):
-#     owner = session.get(Owner, owner_id)
+@app.post("/owners/", response_model=schema.Owner, status_code=201)
+async def create_owner(
+    owner: schema.OwnerCreate, session: Session = Depends(get_session)
+):
+    new_owner = models.Owner(
+        id=0,
+        first_name=owner.first_name,
+        last_name=owner.last_name,
+        email=owner.email,
+        phone=owner.phone,
+    )
+    new_owner = database.create_owner(session, new_owner)
 
-#     if not owner:
-#         raise HTTPException(status_code=404, detail="Owner not found")
-
-#     session.delete(owner)
-#     session.commit()
-
-#     return {"ok": True, "id": owner_id, "deleted": 1}
-
-
-# @app.get("/pet/{pet_id}", response_model=PetPublic)
-# async def get_pet(*, session: Session = Depends(get_session), pet_id: int):
-#     pet = session.get(Pet, pet_id)
-
-#     if not pet:
-#         raise HTTPException(status_code=404, detail="Pet not found")
-
-#     return pet
+    return new_owner
 
 
-# @app.get("/pets", response_model=list[PetPublic])
-# async def get_pets(
-#     *,
-#     session: Session = Depends(get_session),
-#     offset: int = 0,
-#     limit: int = Query(default=10, le=100),
-# ):
-#     pets = session.exec(select(Pet).offset(offset).limit(limit)).all()
-#     return pets
+@app.delete("/owners/{owner_id}", status_code=202)
+async def delete_owner(*, session: Session = Depends(get_session), owner_id: int):
+    result = database.delete_owner(session, owner_id)
+    if result == 1:
+        return {"ok": True, "id": owner_id, "deleted": 1}
+    else:
+        raise HTTPException(status_code=404, detail="Owner not found")
 
 
-# @app.delete("/pets/{pet_id}", status_code=202)
-# async def delete_pet(*, session: Session = Depends(get_session), pet_id: int):
-#     pet = session.get(Pet, pet_id)
+@app.get("/owner/{owner_id}", response_model=schema.Owner)
+async def get_owner(*, session: Session = Depends(get_session), owner_id: int):
+    owner = database.get_owner(session, owner_id)  # session.get(Owner, owner_id)
 
-#     if not pet:
-#         raise HTTPException(status_code=404, detail="Pet not found")
+    if not owner:
+        raise HTTPException(status_code=404, detail="Owner not found")
 
-#     session.delete(pet)
-#     session.commit()
-
-#     return {"ok": True, "id": pet_id, "deleted": 1}
+    return owner
 
 
-# @app.patch("/pets/{pet_id}", response_model=PetPublic)
-# async def update_pet(
-#     *, session: Session = Depends(get_session), pet_id: int, pet: PetCreate
-# ):
-#     db_pet = session.get(Pet, pet_id)
+@app.get("/owners", response_model=list[schema.Owner])
+async def get_owners(
+    *,
+    session: Session = Depends(get_session),
+    offset: int = 0,
+    limit: int = Query(default=10, le=100),
+):
 
-#     if not db_pet:
-#         raise HTTPException(status_code=404, detail="Pet not found")
+    owners = database.get_owners(session)
 
-#     db_pet_data = pet.model_dump(exclude_unset=True)
-#     for key, value in db_pet_data.items():
-#         setattr(db_pet, key, value)
+    if not owners:
+        raise HTTPException(status_code=404, detail="Owners not found")
 
-#     session.add(db_pet)
-#     session.commit()
-#     session.refresh(db_pet)
+    return owners
 
-#     return db_pet
+
+@app.patch("/owners/{owner_id}", response_model=schema.Owner)
+async def update_owner(
+    *, session: Session = Depends(get_session), owner_id: int, owner: schema.OwnerCreate
+):
+
+    updated_owner = database.update_owner(session, owner_id, owner.model_dump(exclude_unset=True))
+    if not updated_owner:
+        raise HTTPException(status_code=404, detail="Owner not found")
+
+    return updated_owner
