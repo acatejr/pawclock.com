@@ -4,30 +4,37 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app_pawclock', '0001_create_pet_model'),
+        ("app_pawclock", "0001_create_pet_model"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Owner',
+            name="Owner",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('first_name', models.CharField(max_length=100)),
-                ('last_name', models.CharField(max_length=100)),
-                ('email', models.EmailField(max_length=254)),
-                ('phone', models.CharField(max_length=15)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("first_name", models.CharField(max_length=100)),
+                ("last_name", models.CharField(max_length=100)),
+                ("email", models.EmailField(max_length=254)),
+                ("phone", models.CharField(max_length=15)),
             ],
             options={
-                'verbose_name': 'Owner',
-                'verbose_name_plural': 'Owners',
+                "verbose_name": "Owner",
+                "verbose_name_plural": "Owners",
             },
         ),
         migrations.AlterModelOptions(
-            name='pet',
-            options={'verbose_name': 'Pet', 'verbose_name_plural': 'Pets'},
+            name="pet",
+            options={"verbose_name": "Pet", "verbose_name_plural": "Pets"},
         ),
     ]
