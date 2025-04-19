@@ -23,10 +23,18 @@ class Owner(BaseModel):
     def __str__(self):
         return self.first_name + " " + self.last_name
 
+PET_TYPE_CHOICES = [
+    ("dog", "Dog"),
+    ("cat", "Cat"),
+    ("other", "Other"),
+]
 
 class Pet(BaseModel):
     name = models.CharField(max_length=100)
     owners = models.ManyToManyField(Owner, related_name="pets")
+    pet_type = models.CharField(
+        max_length=10, choices=PET_TYPE_CHOICES, default="dog"
+    )
 
     class Meta:
         verbose_name = "Pet"
