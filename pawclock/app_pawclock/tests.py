@@ -1,6 +1,7 @@
 from django.test import TestCase
 import pytest
 
+
 def test_example():
     assert True  # Replace with your actual test logic
 
