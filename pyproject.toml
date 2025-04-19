@@ -5,6 +5,10 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "dj-database-url>=2.3.0",
+    "django>=5.2",
+    "django-extensions>=4.1",
+    "psycopg2-binary>=2.9.10",
     "python-dotenv>=1.1.0",
 ]
 
@@ -13,6 +17,8 @@ dev = [
     "faker>=37.1.0",
     "pytest>=8.3.5",
     "pytest-cover>=3.0.0",
+    "pytest-django>=4.11.1",
     "pytest-sugar>=1.0.0",
     "ruff>=0.11.5",
 ]
+
