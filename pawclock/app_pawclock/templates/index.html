@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PawClock</title>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/fontawesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/brands.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/solid.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/svg-with-js.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/v4-shims.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <h2>Active Daycare Session</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pet</th>
+                        <th>Checkin - Owner</th>
+                        <th>Checkin - User</th>
+                        <th>Checkout - Owner</th>
+                        <th>Checkout - User</th>
+                        <th>Checkin Time</th>
+                        <th>Checkout Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for session in object_list %}
+                    <tr>
+                        <td>{{ session.pet }}</td>
+                        <td>{{ session.check_in_owner }}</td>
+                        <td>{{ session.check_in_user }}</td>
+                        <td>{{ session.check_out_owner }}</td>
+                        <td>{{ session.check_out_user }}</td>
+                        <td>{{ session.check_in }}</td>
+                        <td>{{ session.check_out|default_if_none:"&nbsp;" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

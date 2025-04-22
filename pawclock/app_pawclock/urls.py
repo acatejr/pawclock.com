@@ -15,10 +15,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+
+from .views import IndexView
 
 urlpatterns = [
-    path('', include('app_pawclock.urls')),
-    path("admin/", admin.site.urls),
+    path("", IndexView.as_view(), name="index"),
+    # path("about/", views.about, name="about"),
+    # path("contact/", views.contact, name="contact"),
+    # path("privacy/", views.privacy, name="privacy"),
+    # Add more URL patterns as needed
 ]
+
+# Compare this snippet from pawclock/urls.py:
+# urlpatterns = [
+#     path("admin/", admin.site.urls),
+# ]
