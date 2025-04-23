@@ -20,6 +20,18 @@ defmodule AppWeb.Router do
     get "/", PageController, :index
     get "/about", PageController, :about
 
+    live "/pets", PetLive.Index, :index
+    live "/pets/new", PetLive.Index, :new
+    live "/pets/:id/edit", PetLive.Index, :edit
+    live "/pets/:id", PetLive.Show, :show
+    live "/pets/:id/show/edit", PetLive.Show, :edit
+
+    live "/owners", OwnerLive.Index, :index
+    live "/owners/new", OwnerLive.Index, :new
+    live "/owners/:id/edit", OwnerLive.Index, :edit
+    live "/owners/:id", OwnerLive.Show, :show
+    live "/owners/:id/show/edit", OwnerLive.Show, :edit
+
   end
 
   # Other scopes may use custom stacks.
