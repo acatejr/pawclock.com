@@ -4,7 +4,7 @@ defmodule AppWeb.PageController do
   def index(conn, _params) do
     # The home page is often custom made,
     # so skip the default app layout.
-    render(conn, :index, layout: false)
+    render(conn, :index)
   end
 
   def about(conn, _params) do

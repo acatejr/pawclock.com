@@ -7,6 +7,11 @@
       <p class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6">
         v{Application.spec(:phoenix, :vsn)}
       </p>
+      <p>
+        <.link patch={~p"/"} class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Home</.link>
+        <.link patch={~p"/owners"} class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Owners</.link>
+        <.link patch={~p"/pets"} class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Pets</.link>
+      </p>
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
       <a href="https://twitter.com/elixirphoenix" class="hover:text-zinc-700">
